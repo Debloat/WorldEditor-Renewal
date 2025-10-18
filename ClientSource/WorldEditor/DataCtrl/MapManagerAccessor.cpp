@@ -285,9 +285,7 @@ void CMapManagerAccessor::SetTextureBrushVector (std::vector<BYTE>& rTextureBrus
 
 	m_TextureBrushNumberVector.resize (rTextureBrushNumberVector.size());
 
-	std::copy (rTextureBrushNumberVector.begin(),
-			   rTextureBrushNumberVector.end(),
-			   m_TextureBrushNumberVector.begin());
+	std::ranges::copy (rTextureBrushNumberVector, m_TextureBrushNumberVector.begin());
 }
 
 void CMapManagerAccessor::SetInitTextureBrushVector (std::vector<BYTE>& rTextureBrushNumberVector)
@@ -300,9 +298,7 @@ void CMapManagerAccessor::SetInitTextureBrushVector (std::vector<BYTE>& rTexture
 
 	m_InitTextureBrushNumberVector.resize (rTextureBrushNumberVector.size());
 
-	std::copy (rTextureBrushNumberVector.begin(),
-			   rTextureBrushNumberVector.end(),
-			   m_InitTextureBrushNumberVector.begin());
+	std::ranges::copy (rTextureBrushNumberVector, m_InitTextureBrushNumberVector.begin());
 }
 
 bool CMapManagerAccessor::InitBaseTexture (const char* c_szMapName)
@@ -314,7 +310,7 @@ bool CMapManagerAccessor::InitBaseTexture (const char* c_szMapName)
 
 	std::string strMapFolder;
 
-	if (NULL == c_szMapName)
+	if (nullptr == c_szMapName)
 	{
 		if ("" == m_pMapAccessor->GetName())
 		{
@@ -1647,7 +1643,7 @@ CMonsterAreaInfo* CMapManagerAccessor::AddNewMonsterAreaInfo (long lOriginX, lon
 {
 	if (!IsMapReady())
 	{
-		return NULL;
+		return nullptr;
 	}
 	return m_pMapAccessor->AddNewMonsterAreaInfo (lOriginX, lOriginY, lSizeX, lSizeY, eMonsterAreaInfoType, dwVID, dwCount, eNewMonsterDir);
 }
@@ -1700,7 +1696,7 @@ void CMapManagerAccessor::SelectMonsterAreaInfo()
 		}
 	}
 
-	std::sort (m_pSelectedMonsterAreaInfoVector.begin(), m_pSelectedMonsterAreaInfoVector.end(), FMonsterAreaInfoSizeCompare());
+	std::ranges::sort (m_pSelectedMonsterAreaInfoVector, FMonsterAreaInfoSizeCompare());
 
 	m_dwSelectedMonsterAreaInfoIndex = 0;
 
@@ -1738,7 +1734,7 @@ CMonsterAreaInfo* CMapManagerAccessor::GetSelectedMonsterAreaInfo()
 {
 	if (m_pSelectedMonsterAreaInfoVector.empty())
 	{
-		return NULL;
+		return nullptr;
 	}
 	else if (1 == m_pSelectedMonsterAreaInfoVector.size())
 	{
@@ -1766,7 +1762,7 @@ void CMapManagerAccessor::__AddMapInfo()
 		return;
 	}
 
-	TMapInfoVectorIterator MapInfoVectorIterator = std::find_if (m_kVct_kMapInfo.begin(), m_kVct_kMapInfo.end(), FFindMapName (m_pMapAccessor->GetName()));
+	auto MapInfoVectorIterator = std::ranges::find_if (m_kVct_kMapInfo, FFindMapName (m_pMapAccessor->GetName()));
 	if (m_kVct_kMapInfo.end() != MapInfoVectorIterator)
 	{
 		UpdateMapInfo();
@@ -1797,7 +1793,7 @@ void CMapManagerAccessor::UpdateMapInfo()
 	}
 
 	const std::string & c_rMapName = m_pMapAccessor->GetName();
-	TMapInfoVectorIterator MapInfoVectorIterator = std::find_if (m_kVct_kMapInfo.begin(), m_kVct_kMapInfo.end(), FFindMapName (c_rMapName));
+	auto MapInfoVectorIterator = std::ranges::find_if (m_kVct_kMapInfo, FFindMapName (c_rMapName));
 	if (m_kVct_kMapInfo.end() == MapInfoVectorIterator)
 	{
 		return;
@@ -1812,7 +1808,7 @@ void CMapManagerAccessor::__RefreshMapID (const char* c_szMapName)
 {
 	std::string strMapName = c_szMapName;
 	stl_lowers (strMapName);
-	if (m_kMap_strMapName_iID.end() != m_kMap_strMapName_iID.find (strMapName))
+	if (m_kMap_strMapName_iID.contains(strMapName))
 	{
 		int iID = m_kMap_strMapName_iID[strMapName];
 		m_pMapAccessor->SetMapID (iID);

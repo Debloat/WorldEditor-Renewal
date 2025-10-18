@@ -1368,12 +1368,12 @@ bool CMapOutdoorAccessor::LoadTerrain (WORD wX, WORD wY, WORD wCellCoordX, WORD 
 		return false;
 	}
 
-	if (stTokenVectorMap.end() == stTokenVectorMap.find ("scripttype"))
+	if (!stTokenVectorMap.contains("scripttype"))
 	{
 		return false;
 	}
 
-	if (stTokenVectorMap.end() == stTokenVectorMap.find ("areaname"))
+	if (!stTokenVectorMap.contains("areaname"))
 	{
 		return false;
 	}
@@ -1487,11 +1487,11 @@ void CMapOutdoorAccessor::UpdateAreaList (long lCenterX, long lCenterY)
 	if (!rPushTerrainToDeleteVector.m_ReturnTerrainVector.empty())
 	{
 		m_TerrainDeleteVector.resize (rPushTerrainToDeleteVector.m_ReturnTerrainVector.size());
-		std::copy (rPushTerrainToDeleteVector.m_ReturnTerrainVector.begin(), rPushTerrainToDeleteVector.m_ReturnTerrainVector.end(), m_TerrainDeleteVector.begin());
+		std::ranges::copy (rPushTerrainToDeleteVector.m_ReturnTerrainVector, m_TerrainDeleteVector.begin());
 
 		for (DWORD dwIndex = 0; dwIndex < rPushTerrainToDeleteVector.m_ReturnTerrainVector.size(); ++dwIndex)
 		{
-			TTerrainPtrVectorIterator aTerrainPtrItertor = m_TerrainVector.begin();
+			auto aTerrainPtrItertor = m_TerrainVector.begin();
 			while (aTerrainPtrItertor != m_TerrainVector.end())
 			{
 				CTerrainAccessor * pTerrainAccessor = (CTerrainAccessor*) *aTerrainPtrItertor;
@@ -1509,11 +1509,11 @@ void CMapOutdoorAccessor::UpdateAreaList (long lCenterX, long lCenterY)
 	if (!rPushAreaToDeleteVector.m_ReturnAreaVector.empty())
 	{
 		m_AreaDeleteVector.resize (rPushAreaToDeleteVector.m_ReturnAreaVector.size());
-		std::copy (rPushAreaToDeleteVector.m_ReturnAreaVector.begin(), rPushAreaToDeleteVector.m_ReturnAreaVector.end(), m_AreaDeleteVector.begin());
+		std::ranges::copy (rPushAreaToDeleteVector.m_ReturnAreaVector, m_AreaDeleteVector.begin());
 
 		for (DWORD dwIndex = 0; dwIndex < rPushAreaToDeleteVector.m_ReturnAreaVector.size(); ++dwIndex)
 		{
-			TAreaPtrVectorIterator aAreaPtrItertor = m_AreaVector.begin();
+			auto aAreaPtrItertor = m_AreaVector.begin();
 			while (aAreaPtrItertor != m_AreaVector.end())
 			{
 				CAreaAccessor * pAreaAccessor = (CAreaAccessor*) *aAreaPtrItertor;
@@ -1659,7 +1659,7 @@ void CMapOutdoorAccessor::__ACCESS_ConvertToMapCoords (float fx, float fy, int* 
 
 void CMapOutdoorAccessor::RemoveMonsterAreaInfoPtr (CMonsterAreaInfo * pMonsterAreaInfo)
 {
-	m_MonsterAreaInfoPtrVectorIterator = std::find (m_MonsterAreaInfoPtrVector.begin(), m_MonsterAreaInfoPtrVector.end(), pMonsterAreaInfo);
+	m_MonsterAreaInfoPtrVectorIterator = std::ranges::find (m_MonsterAreaInfoPtrVector, pMonsterAreaInfo);
 	if (m_MonsterAreaInfoPtrVectorIterator != m_MonsterAreaInfoPtrVector.end())
 	{
 		pMonsterAreaInfo->Clear();
@@ -1765,7 +1765,7 @@ bool CMapOutdoorAccessor::SaveMonsterAreaInfo()
 		return false;
 	}
 
-	std::set<DWORD>::iterator itor = MonsterVnumSet.begin();
+	auto itor = MonsterVnumSet.begin();
 	for (; itor != MonsterVnumSet.end(); ++itor)
 	{
 		fprintf (MonsterArrangeFile, "%d\n", *itor);
@@ -1836,7 +1836,7 @@ struct FGetDungeonObjectHeight
 
 void CMapOutdoorAccessor::ArrangeTerrainHeight()
 {
-	int iRet = ::MessageBox (NULL, "Terrain will change and it can't be undone.\nDo you want to proceed?", "Warning", MB_YESNO);
+	int iRet = ::MessageBox (nullptr, "Terrain will change and it can't be undone.\nDo you want to proceed?", "Warning", MB_YESNO);
 	if (6 != iRet)
 	{
 		return;
@@ -1847,7 +1847,7 @@ void CMapOutdoorAccessor::ArrangeTerrainHeight()
 	pView->Lock();
 
 	__CreateProgressDialog();
-	_beginthread (CMapOutdoorAccessor::main_ArrangeTerrainHeight, 0, NULL);
+	_beginthread (CMapOutdoorAccessor::main_ArrangeTerrainHeight, 0, nullptr);
 }
 
 void CMapOutdoorAccessor::__CreateProgressDialog()
@@ -1877,7 +1877,7 @@ void CMapOutdoorAccessor::__DestroyProgressDialog()
 	{
 		delete ms_pkProgressDialog;
 	}
-	ms_pkProgressDialog = NULL;
+	ms_pkProgressDialog = nullptr;
 }
 
 void CMapOutdoorAccessor::main_ArrangeTerrainHeight (void* pv)
