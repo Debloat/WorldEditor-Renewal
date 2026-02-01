@@ -44,11 +44,11 @@ class CShadowRenderHelper : public CScreen, public CSingleton<CShadowRenderHelpe
 		void SetIntermediateShadowMapFilter (D3DTEXTUREFILTERTYPE eTextureFilter);
 
 		// Output
-		LPDIRECT3DTEXTURE8 GetShadowTexture()
+		LPDIRECT3DTEXTURE9 GetShadowTexture()
 		{
 			return m_lpShadowMapRenderTargetTexture;
 		}
-		LPDIRECT3DTEXTURE8 GetIntermediateShadowTexture()
+		LPDIRECT3DTEXTURE9 GetIntermediateShadowTexture()
 		{
 			return m_lpIntermediateRenderTargetTexture;
 		}
@@ -85,23 +85,23 @@ class CShadowRenderHelper : public CScreen, public CSingleton<CShadowRenderHelpe
 		DWORD					m_dwIntermediateShadowMapSize;
 
 		// Shadow Map
-		LPDIRECT3DSURFACE8		m_lpShadowMapRenderTargetSurface;
-		LPDIRECT3DSURFACE8		m_lpShadowMapDepthSurface;
-		LPDIRECT3DTEXTURE8		m_lpShadowMapRenderTargetTexture;
-		D3DVIEWPORT8			m_ShadowMapViewport;
+		LPDIRECT3DSURFACE9		m_lpShadowMapRenderTargetSurface;
+		LPDIRECT3DSURFACE9		m_lpShadowMapDepthSurface;
+		LPDIRECT3DTEXTURE9		m_lpShadowMapRenderTargetTexture;
+		D3DVIEWPORT9			m_ShadowMapViewport;
 
 		D3DTEXTUREFILTERTYPE	m_eShadowMapTextureFilter;
 
 		// Backup
-		LPDIRECT3DSURFACE8		m_lpBackupRenderTargetSurface;
-		LPDIRECT3DSURFACE8		m_lpBackupDepthSurface;
-		D3DVIEWPORT8			m_BackupViewport;
+		LPDIRECT3DSURFACE9		m_lpBackupRenderTargetSurface;
+		LPDIRECT3DSURFACE9		m_lpBackupDepthSurface;
+		D3DVIEWPORT9			m_BackupViewport;
 
 		// 중간 랜더
-		LPDIRECT3DSURFACE8		m_lpIntermediateRenderTargetSurface;
-		LPDIRECT3DSURFACE8		m_lpIntermediateDepthSurface;
-		LPDIRECT3DTEXTURE8		m_lpIntermediateRenderTargetTexture;
-		D3DVIEWPORT8			m_IntermediateViewport;
+		LPDIRECT3DSURFACE9		m_lpIntermediateRenderTargetSurface;
+		LPDIRECT3DSURFACE9		m_lpIntermediateDepthSurface;
+		LPDIRECT3DTEXTURE9		m_lpIntermediateRenderTargetTexture;
+		D3DVIEWPORT9			m_IntermediateViewport;
 		D3DXMATRIX				m_matLightView;
 		D3DXMATRIX				m_matLightProj;
 

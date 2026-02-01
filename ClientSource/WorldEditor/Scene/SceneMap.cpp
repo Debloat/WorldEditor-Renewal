@@ -196,7 +196,7 @@ void CSceneMap::OnRender (BOOL bClear)
 		if (m_bObjectRenderingOn)
 		{
 			m_pMapAccessor->RenderArea();
-			CSpeedTreeForestDirectX8::Instance().Render();
+			CSpeedTreeForestDirectX9::Instance().Render();
 		}
 
 		if (m_bTerrainRenderingOn)
@@ -623,8 +623,8 @@ void CSceneMap::OnRenderEnvironmentMap()
 	STATEMANAGER.SaveTransform (D3DTS_PROJECTION, &matProj);
 
 	// Store the current back buffer and z-buffer.
-	LPDIRECT3DSURFACE8 pBackBuffer, pZBuffer;
-	ms_lpd3dDevice->GetRenderTarget (&pBackBuffer);
+	LPDIRECT3DSURFACE9 pBackBuffer, pZBuffer;
+	ms_lpd3dDevice->GetRenderTarget (0, &pBackBuffer);
 	ms_lpd3dDevice->GetDepthStencilSurface (&pZBuffer);
 
 	// Use 90-degree field of view in the projection.
@@ -671,8 +671,9 @@ void CSceneMap::OnRenderEnvironmentMap()
 		STATEMANAGER.SetTransform (D3DTS_VIEW, &matView);
 
 		//Get pointer to surface in order to render to it.
-		LPDIRECT3DSURFACE8 pFace = NULL;
-		ms_lpd3dDevice->SetRenderTarget (pFace, pZBuffer);
+		LPDIRECT3DSURFACE9 pFace = NULL;
+		ms_lpd3dDevice->SetRenderTarget (0, pFace);
+		ms_lpd3dDevice->SetDepthStencilSurface(pZBuffer);
 
 		if (FAILED (ms_lpd3dDevice->Clear (0L,
 										   NULL,
@@ -702,7 +703,8 @@ void CSceneMap::OnRenderEnvironmentMap()
 		ms_lpd3dDevice->EndScene();
 	}
 
-	ms_lpd3dDevice->SetRenderTarget (pBackBuffer, pZBuffer);
+	ms_lpd3dDevice->SetRenderTarget (0, pBackBuffer);
+	ms_lpd3dDevice->SetDepthStencilSurface(pZBuffer);
 	pBackBuffer->Release();
 	pZBuffer->Release();
 

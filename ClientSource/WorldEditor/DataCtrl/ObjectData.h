@@ -87,7 +87,7 @@ class CObjectData
 			std::string				strName;
 			std::string				strFileName;
 			bool					bLightEnable;
-			D3DLIGHT8				Light;
+			D3DLIGHT9				Light;
 		} TLightElementData;
 
 		typedef struct STextureData
@@ -131,7 +131,7 @@ class CObjectData
 				}
 			}
 
-			D3DMATERIAL8			Material;
+			D3DMATERIAL9			Material;
 			bool					bSpecularEnable;
 			TTextureState			TextureState[2][2];
 			TTextureData			TextureData[2];
@@ -211,7 +211,7 @@ class CObjectData
 		bool isEnableTexture (int iIndex);
 		void SetEnableTexture (int iIndex, BOOL bFlag);
 		void LoadTexture (int iIndex, const char* c_szFileName);
-		bool GetTexture (int iIndex, LPDIRECT3DTEXTURE8 * plpTexture);
+		bool GetTexture (int iIndex, LPDIRECT3DTEXTURE9 * plpTexture);
 		const char* GetTextureName (int iIndex);
 
 		// Light
@@ -227,14 +227,14 @@ class CObjectData
 		bool isLightEnable (DWORD dwIndex);
 		void SetLightEnable (DWORD dwIndex, bool bFlag);
 
-		bool GetLight (DWORD dwIndex, const D3DLIGHT8** ppd3dLight);
+		bool GetLight (DWORD dwIndex, const D3DLIGHT9** ppd3dLight);
 		void SetLightDirection (DWORD dwIndex, float fx, float fy, float fz);
 		void SetLightDiffuse (DWORD dwIndex, int iRed, int iGreen, int iBlue);
 		void SetLightAmbient (DWORD dwIndex, int iRed, int iGreen, int iBlue);
 		void SetLightSpecular (DWORD dwIndex, int iRed, int iGreen, int iBlue);
 
 		// Material
-		void GetMaterial (const D3DMATERIAL8** ppd3dMaterial);
+		void GetMaterial (const D3DMATERIAL9** ppd3dMaterial);
 		bool isSpecularEnable();
 		void SetSpecularEnable (bool bFlag);
 		void SetMaterialDiffuse (int iRed, int iGreen, int iBlue);

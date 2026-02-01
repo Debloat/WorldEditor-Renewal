@@ -11,7 +11,7 @@
 #include "DataCtrl/NonPlayerCharacterInfo.h"
 #include "../EterLib/Camera.h"
 
-#include <SpeedTree/SpeedTreeRT.h>
+#include <SpeedTreeRT.h>
 
 #pragma comment(linker, "/NODEFAULTLIB:libci.lib")
 
@@ -19,43 +19,27 @@
 #pragma comment( lib, "granny2.lib" )
 #pragma comment( lib, "mss32.lib" )
 
-#ifdef _DEBUG
-	#pragma comment( lib, "DevIL-1.7.8d.lib" )
-#else
-	#pragma comment( lib, "DevIL-1.7.8.lib" )
-#endif
-#ifdef _DEBUG
-	#pragma comment( lib, "DevILU-1.7.8d.lib" )
-#else
-	#pragma comment( lib, "DevILU-1.7.8.lib" )
-#endif
+#pragma comment( lib, "DevIL.lib" )
+#pragma comment( lib, "ILU.lib" )
 
 #pragma comment( lib, "oldnames.lib" )
 #pragma comment( lib, "dinput8.lib" )
 #pragma comment( lib, "dxguid.lib" )
 
-#pragma comment(lib, "DirectX8/d3d8.lib")
-#pragma comment(lib, "DirectX8/d3dx8.lib")
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
 
 #pragma comment( lib, "version.lib" )
 #pragma comment( lib, "imagehlp.lib" )
 #pragma comment( lib, "winmm.lib" )
 #pragma comment( lib, "imm32.lib" )
 
-#ifdef _DEBUG
-	#pragma comment( lib, "SpeedTreeRT_MTd.lib" )
-#else
-	#pragma comment( lib, "SpeedTreeRT_MT.lib" )
-#endif
+#pragma comment( lib, "speedtree_static_Win32.lib" )
 
 //#pragma comment( lib, "ws2_32.lib" )
 //#pragma comment( lib, "wsock32.lib" )
 
-#ifdef _DEBUG
-	#pragma comment( lib, "cryptlib-8.9.0MTd.lib" )
-#else
-	#pragma comment( lib, "cryptlib-8.9.0MT.lib" )
-#endif
+#pragma comment( lib, "cryptlib_Win32.lib" )
 
 #ifdef _DEBUG
 	#define new DEBUG_NEW

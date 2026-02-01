@@ -174,7 +174,7 @@ class CSetRenderingOption : public CScreen
 
 		CSetRenderingOption (BOOL isFilled, const D3DXMATRIX & c_rmatWorld)
 		{
-			ms_lpd3dDevice->GetVertexShader (&m_dwVS);
+			ms_lpd3dDevice->GetFVF (&m_dwVS);
 
 			STATEMANAGER.SaveTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TFACTOR);
 			STATEMANAGER.SaveTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
@@ -201,7 +201,7 @@ class CSetRenderingOption : public CScreen
 
 		~CSetRenderingOption()
 		{
-			ms_lpd3dDevice->SetVertexShader (m_dwVS);
+			ms_lpd3dDevice->SetFVF (m_dwVS);
 
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_COLORARG1);
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_COLOROP);
@@ -343,7 +343,7 @@ void RenderBackGroundTile()
 			g_TileInstance.GetDeformableVertexCount(),
 			D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1,
 			D3DUSAGE_WRITEONLY,
-			D3DPOOL_MANAGED);
+			D3DPOOL_DEFAULT);
 		g_TileInstance.SetMainModelPointer (g_pTileThing->GetModelPointer (0), &m_kSharedDeformableVertexBuffer);
 		//g_TileInstance.SetModelPointer(g_pTileThing->GetModelPointer(0));
 
@@ -376,8 +376,8 @@ void CTileInstance::LoadTexture()
 
 void CTileInstance::RenderTile()
 {
-	LPDIRECT3DVERTEXBUFFER8 lpd3dRigidPNTVtxBuf = m_pModel->GetPNTD3DVertexBuffer();
-	LPDIRECT3DINDEXBUFFER8 lpd3dIdxBuf = m_pModel->GetD3DIndexBuffer();
+	LPDIRECT3DVERTEXBUFFER9 lpd3dRigidPNTVtxBuf = m_pModel->GetPNTD3DVertexBuffer();
+	LPDIRECT3DINDEXBUFFER9 lpd3dIdxBuf = m_pModel->GetD3DIndexBuffer();
 
 	const CGrannyModel::TMeshNode * pMeshNode = m_pModel->GetMeshNodeList (CGrannyMesh::TYPE_RIGID, CGrannyMaterial::TYPE_DIFFUSE_PNT);
 
@@ -387,7 +387,7 @@ void CTileInstance::RenderTile()
 		int vtxMeshBasePos = pMesh->GetVertexBasePosition();
 
 		STATEMANAGER.SetIndices (lpd3dIdxBuf, vtxMeshBasePos);
-		STATEMANAGER.SetVertexShader (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1);
+		STATEMANAGER.SetFVF (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1);
 		STATEMANAGER.SetStreamSource (0, lpd3dRigidPNTVtxBuf, sizeof (TPNTVertex));
 		STATEMANAGER.SetTransform (D3DTS_WORLD, &CScreen::GetIdentityMatrix());
 

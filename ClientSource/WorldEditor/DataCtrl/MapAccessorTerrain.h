@@ -79,8 +79,8 @@ class CTerrainAccessor : public CTerrain
 		bool RAW_SaveTileMap (const std::string & c_rstrMapName);
 		bool SaveAttrMap (const std::string & c_rstrMapName);
 		bool SaveWaterMap (const std::string & c_rstrMapName);
-		bool SaveShadowFromD3DTexture8 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE8 lpShadowTexture);
-		bool SaveMiniMapFromD3DTexture8 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE8 lpShadowTexture);
+		bool SaveShadowFromD3DTexture9 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE9 lpShadowTexture);
+		bool SaveMiniMapFromD3DTexture9 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE9 lpShadowTexture);
 		bool ReloadShadowTexture (const std::string & c_rstrMapName);
 
 		//////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ class CTerrainAccessor : public CTerrain
 
 	protected:
 		TTerrainSplatPatch	m_RAWAttrSplatPatch;
-		LPDIRECT3DTEXTURE8	m_lpAttrTexture;
+		LPDIRECT3DTEXTURE9	m_lpAttrTexture;
 
 		BOOL m_isDestroied;
 };

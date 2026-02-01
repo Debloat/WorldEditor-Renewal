@@ -218,7 +218,7 @@ class CSceneMap : public CSceneBase
 		bool						m_bTerrainRenderingOn;
 		bool						m_bShadowRenderingOn;
 		bool						m_bGuildAreaRenderingOn;
-		LPDIRECT3DVERTEXBUFFER8		m_pBigSquareVB;
+		LPDIRECT3DVERTEXBUFFER9		m_pBigSquareVB;
 
 		bool						m_bLightPositionEditingInProgress;
 		bool						m_bLightPositionEditingOn;

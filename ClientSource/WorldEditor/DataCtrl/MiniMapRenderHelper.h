@@ -30,7 +30,7 @@ class CMiniMapRenderHelper : public CScreen, public CSingleton<CMiniMapRenderHel
 		void SetMiniMapPower (BYTE byMiniMapPower);
 		void SetMiniMapFilter (D3DTEXTUREFILTERTYPE eTextureFilter);
 
-		LPDIRECT3DTEXTURE8 GetMiniMapTexture()
+		LPDIRECT3DTEXTURE9 GetMiniMapTexture()
 		{
 			return m_lpMiniMapRenderTargetTexture;
 		}
@@ -55,17 +55,17 @@ class CMiniMapRenderHelper : public CScreen, public CSingleton<CMiniMapRenderHel
 		DWORD					m_dwMiniMapSize;
 
 		// Shadow Map
-		LPDIRECT3DSURFACE8		m_lpMiniMapRenderTargetSurface;
-		LPDIRECT3DSURFACE8		m_lpMiniMapDepthSurface;
-		LPDIRECT3DTEXTURE8		m_lpMiniMapRenderTargetTexture;
-		D3DVIEWPORT8			m_MiniMapViewport;
+		LPDIRECT3DSURFACE9		m_lpMiniMapRenderTargetSurface;
+		LPDIRECT3DSURFACE9		m_lpMiniMapDepthSurface;
+		LPDIRECT3DTEXTURE9		m_lpMiniMapRenderTargetTexture;
+		D3DVIEWPORT9			m_MiniMapViewport;
 
 		D3DTEXTUREFILTERTYPE	m_eMiniMapTextureFilter;
 
 		// Backup
-		LPDIRECT3DSURFACE8		m_lpBackupRenderTargetSurface;
-		LPDIRECT3DSURFACE8		m_lpBackupDepthSurface;
-		D3DVIEWPORT8			m_BackupViewport;
+		LPDIRECT3DSURFACE9		m_lpBackupRenderTargetSurface;
+		LPDIRECT3DSURFACE9		m_lpBackupDepthSurface;
+		D3DVIEWPORT9			m_BackupViewport;
 		D3DXMATRIX				m_matBackupProj;
 
 };

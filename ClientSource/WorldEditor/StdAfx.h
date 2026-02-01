@@ -8,7 +8,7 @@
 
 #pragma once
 
-#define DIRECT3D_VERSION 0x0800
+#define DIRECT3D_VERSION 0x0900
 
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 

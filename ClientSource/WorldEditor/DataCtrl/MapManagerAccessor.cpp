@@ -1366,7 +1366,7 @@ void CMapManagerAccessor::SaveMiniMap()
 
 	CMiniMapRenderHelper::Instance().EndRendering();
 
-	pTerrainAccessor->SaveMiniMapFromD3DTexture8 (m_pMapAccessor->GetName(), CMiniMapRenderHelper::Instance().GetMiniMapTexture());
+	pTerrainAccessor->SaveMiniMapFromD3DTexture9 (m_pMapAccessor->GetName(), CMiniMapRenderHelper::Instance().GetMiniMapTexture());
 
 	CMiniMapRenderHelper::Instance().ReleaseTextures();
 }
@@ -1515,7 +1515,7 @@ void CMapManagerAccessor::UpdateTerrainShadowMap()
 
 	if (CShadowRenderHelper::Instance().StartRenderingPhase (1))
 	{
-		CSpeedTreeForestDirectX8::Instance().Render (Forest_RenderAll | Forest_RenderToShadow);
+		CSpeedTreeForestDirectX9::Instance().Render (Forest_RenderAll | Forest_RenderToShadow);
 		m_pMapAccessor->RenderToShadowMap();
 	}
 	else
@@ -1536,7 +1536,7 @@ void CMapManagerAccessor::UpdateTerrainShadowMap()
 
 	CShadowRenderHelper::Instance().EndRenderingPhase (2);
 
-	pTerrainAccessor->SaveShadowFromD3DTexture8 (m_pMapAccessor->GetName(), CShadowRenderHelper::Instance().GetShadowTexture());
+	pTerrainAccessor->SaveShadowFromD3DTexture9 (m_pMapAccessor->GetName(), CShadowRenderHelper::Instance().GetShadowTexture());
 
 	CShadowRenderHelper::Instance().ReleaseTextures();
 }

@@ -104,7 +104,7 @@ void CSceneObject::OnRender (BOOL bClear)
 		return;
 	}
 
-	D3DMATERIAL8 mat;
+	D3DMATERIAL9 mat;
 	mat.Ambient = D3DXCOLOR (1.0f, 1.0f, 1.0f, 1.0f);
 	mat.Diffuse = D3DXCOLOR (1.0f, 1.0f, 1.0f, 1.0f);
 	mat.Emissive = D3DXCOLOR (0.5f, 0.5f, 0.5f, 0.0f);

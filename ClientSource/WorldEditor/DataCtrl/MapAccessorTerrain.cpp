@@ -1352,7 +1352,7 @@ void ReadDTXnFile (DWORD count, void* buffer)
 	return;
 }
 
-bool CTerrainAccessor::SaveShadowFromD3DTexture8 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE8 lpShadowTexture)
+bool CTerrainAccessor::SaveShadowFromD3DTexture9 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE9 lpShadowTexture)
 {
 	char szFileName[256];
 	DWORD ulID = (DWORD) (m_wX) * 1000L + (DWORD) (m_wY);
@@ -1482,7 +1482,7 @@ bool CTerrainAccessor::SaveShadowFromD3DTexture8 (const std::string & c_rstrMapN
 	return true;
 }
 
-bool CTerrainAccessor::SaveMiniMapFromD3DTexture8 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE8 lpMiniMapTexture)
+bool CTerrainAccessor::SaveMiniMapFromD3DTexture9 (const std::string & c_rstrMapName, LPDIRECT3DTEXTURE9 lpMiniMapTexture)
 {
 	char szFileName[256];
 	DWORD ulID = (DWORD) (m_wX) * 1000L + (DWORD) (m_wY);
@@ -1698,7 +1698,7 @@ void CTerrainAccessor::RAW_GenerateAttrSplat()
 		HRESULT hr;
 		do
 		{
-			hr = ms_lpd3dDevice->CreateTexture (ATTRMAP_XSIZE, ATTRMAP_YSIZE, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &m_lpAttrTexture);
+			hr = ms_lpd3dDevice->CreateTexture (ATTRMAP_XSIZE, ATTRMAP_YSIZE, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_lpAttrTexture, nullptr);
 		}
 		while (FAILED (hr));
 		do

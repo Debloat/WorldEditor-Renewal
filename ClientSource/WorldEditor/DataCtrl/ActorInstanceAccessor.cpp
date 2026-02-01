@@ -40,7 +40,7 @@ void CActorInstanceAccessor::AttachObject (const char* c_szFileName, const char*
 		ModelInstance.pModelInstance->GetDeformableVertexCount(),
 		D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1,
 		D3DUSAGE_WRITEONLY,
-		D3DPOOL_MANAGED);
+		D3DPOOL_DEFAULT);
 	ModelInstance.pModelInstance->SetMainModelPointer (ModelInstance.pThing->GetModelPointer (0), &m_kSharedDeformableVertexBuffer);
 	//ModelInstance.pModelInstance->SetModelPointer(ModelInstance.pThing->GetModelPointer(0));
 

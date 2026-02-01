@@ -133,13 +133,18 @@ bool CShadowRenderHelper::StartRenderingPhase (BYTE byPhase)
 			STATEMANAGER.SaveTransform (D3DTS_VIEW, &m_matLightView);
 			STATEMANAGER.SaveTransform (D3DTS_PROJECTION, &m_matLightProj);
 
-			CSpeedTreeForestDirectX8::Instance().UpdateCompundMatrix (v3Eye, m_matLightView, m_matLightProj);
+			CSpeedTreeForestDirectX9::Instance().UpdateCompundMatrix (v3Eye, m_matLightView, m_matLightProj);
 
 			SaveRenderTarget();
 
-			if (FAILED (ms_lpd3dDevice->SetRenderTarget (m_lpIntermediateRenderTargetSurface, m_lpIntermediateDepthSurface)))
+			if (FAILED (ms_lpd3dDevice->SetRenderTarget (0, m_lpIntermediateRenderTargetSurface)))
 			{
 				Trace ("CShadowRenderHelper::StartRenderingPhase Unable to Set Intermediate Render Target");
+				bSuccess = false;
+			}
+			if (FAILED(ms_lpd3dDevice->SetDepthStencilSurface(m_lpIntermediateDepthSurface)))
+			{
+				Trace("CShadowRenderHelper::StartRenderingPhase Unable to Set Intermediate Depth Stencil Surface");
 				bSuccess = false;
 			}
 
@@ -173,8 +178,8 @@ bool CShadowRenderHelper::StartRenderingPhase (BYTE byPhase)
 			STATEMANAGER.SaveRenderState (D3DRS_TEXTUREFACTOR, 0xFF808080);
 			STATEMANAGER.SaveTextureStageState (0, D3DTSS_COLORARG1,	D3DTA_TFACTOR);
 			STATEMANAGER.SaveTextureStageState (0, D3DTSS_COLOROP,	D3DTOP_SELECTARG1);
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_MINFILTER,	m_eIntermediateTextureFilter);
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_MAGFILTER,	m_eIntermediateTextureFilter);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_MINFILTER,	m_eIntermediateTextureFilter);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_MAGFILTER,	m_eIntermediateTextureFilter);
 			STATEMANAGER.SetTextureStageState (0, D3DTSS_ALPHAOP,	D3DTOP_DISABLE);
 
 			STATEMANAGER.SetTextureStageState (1, D3DTSS_COLOROP,	D3DTOP_DISABLE);
@@ -197,7 +202,7 @@ bool CShadowRenderHelper::StartRenderingPhase (BYTE byPhase)
 			D3DXVECTOR3 pUp (0.0f, 1.0f, 0.0f);
 			D3DXMatrixLookAtRH (&matTopView, &v3Eye, &v3Target, &pUp);
 
-			float fDeterminantMatView = D3DXMatrixfDeterminant (&matTopView);
+			float fDeterminantMatView = D3DXMatrixDeterminant (&matTopView);
 			D3DXMatrixInverse (&textureMatrix, &fDeterminantMatView, &matTopView);
 
 			textureMatrix *= m_matLightView;
@@ -215,9 +220,15 @@ bool CShadowRenderHelper::StartRenderingPhase (BYTE byPhase)
 
 			SaveRenderTarget();
 
-			if (FAILED (ms_lpd3dDevice->SetRenderTarget (m_lpShadowMapRenderTargetSurface, m_lpShadowMapDepthSurface)))
+			if (FAILED (ms_lpd3dDevice->SetRenderTarget (0, m_lpShadowMapRenderTargetSurface)))
 			{
 				LogBox ("CShadowRenderHelper::StartRenderingPhase Unable to Set Shadow Map Render Target");
+				bSuccess = false;
+			}
+
+			if (FAILED(ms_lpd3dDevice->SetDepthStencilSurface(m_lpShadowMapDepthSurface)))
+			{
+				LogBox("CShadowRenderHelper::StartRenderingPhase Unable to Set Shadow Map Depth Stencil Surface");
 				bSuccess = false;
 			}
 
@@ -246,11 +257,11 @@ bool CShadowRenderHelper::StartRenderingPhase (BYTE byPhase)
 			STATEMANAGER.SetTexture (0, m_lpIntermediateRenderTargetTexture);
 			STATEMANAGER.SetTexture (1, NULL);
 
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMP);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
 			// use linear filtering
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_MINFILTER, m_eShadowMapTextureFilter);
-			STATEMANAGER.SaveTextureStageState (0, D3DTSS_MAGFILTER, m_eShadowMapTextureFilter);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_MINFILTER, m_eShadowMapTextureFilter);
+			STATEMANAGER.SaveSamplerState (0, D3DSAMP_MAGFILTER, m_eShadowMapTextureFilter);
 
 			STATEMANAGER.SaveTransform (D3DTS_TEXTURE0, &textureMatrix);
 
@@ -277,8 +288,8 @@ void CShadowRenderHelper::EndRenderingPhase (BYTE byPhase)
 			STATEMANAGER.RestoreRenderState (D3DRS_TEXTUREFACTOR);
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_COLOROP);
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_COLORARG1);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_MINFILTER);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_MAGFILTER);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_MINFILTER);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_MAGFILTER);
 
 			STATEMANAGER.RestoreTransform (D3DTS_VIEW);
 			STATEMANAGER.RestoreTransform (D3DTS_PROJECTION);
@@ -295,17 +306,17 @@ void CShadowRenderHelper::EndRenderingPhase (BYTE byPhase)
 			STATEMANAGER.RestoreTransform (D3DTS_PROJECTION);
 
 			STATEMANAGER.RestoreRenderState (D3DRS_ALPHABLENDENABLE);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_ADDRESSU);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_ADDRESSV);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_MINFILTER);
-			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_MAGFILTER);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_ADDRESSU);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_ADDRESSV);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_MINFILTER);
+			STATEMANAGER.RestoreSamplerState (0, D3DSAMP_MAGFILTER);
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_TEXCOORDINDEX);
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_TEXTURETRANSFORMFLAGS);
 
 			ms_lpd3dDevice->SetViewport (&m_BackupViewport);
 			RestoreRenderTarget();
 
-			CSpeedTreeForestDirectX8::Instance().UpdateCompundMatrix (CCameraManager::Instance().GetCurrentCamera()->GetEye(), ms_matView, ms_matProj);
+			CSpeedTreeForestDirectX9::Instance().UpdateCompundMatrix (CCameraManager::Instance().GetCurrentCamera()->GetEye(), ms_matView, ms_matProj);
 		}
 		break;
 	}
@@ -313,7 +324,7 @@ void CShadowRenderHelper::EndRenderingPhase (BYTE byPhase)
 
 bool CShadowRenderHelper::SaveRenderTarget()
 {
-	if (FAILED (ms_lpd3dDevice->GetRenderTarget (&m_lpBackupRenderTargetSurface)))
+	if (FAILED (ms_lpd3dDevice->GetRenderTarget (0, &m_lpBackupRenderTargetSurface)))
 	{
 		LogBox ("Unable to Save Window Render Target\n");
 		return false;
@@ -335,7 +346,8 @@ void CShadowRenderHelper::RestoreRenderTarget()
 		return;
 	}
 
-	ms_lpd3dDevice->SetRenderTarget (m_lpBackupRenderTargetSurface, m_lpBackupDepthSurface);
+	ms_lpd3dDevice->SetRenderTarget (0, m_lpBackupRenderTargetSurface);
+	ms_lpd3dDevice->SetDepthStencilSurface(m_lpBackupDepthSurface);
 
 	SAFE_RELEASE (m_lpBackupDepthSurface);
 	SAFE_RELEASE (m_lpBackupRenderTargetSurface);
@@ -354,7 +366,7 @@ bool CShadowRenderHelper::CreateTextures()
 
 	// Shadow Map
 	if (FAILED (ms_lpd3dDevice->CreateTexture (m_dwShadowMapSize, m_dwShadowMapSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,
-											   &m_lpShadowMapRenderTargetTexture)))
+											   &m_lpShadowMapRenderTargetTexture, nullptr)))
 	{
 		LogBox ("Unable to create ShadowMap render target texture");
 		return false;
@@ -366,7 +378,7 @@ bool CShadowRenderHelper::CreateTextures()
 		return false;
 	}
 
-	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwShadowMapSize, m_dwShadowMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, &m_lpShadowMapDepthSurface)))
+	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwShadowMapSize, m_dwShadowMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, true, &m_lpShadowMapDepthSurface, nullptr)))
 	{
 		LogBox ("Unable to create Output ShadowMap depth Surface");
 		return false;
@@ -374,7 +386,7 @@ bool CShadowRenderHelper::CreateTextures()
 
 	// Intermediate
 	if (FAILED (ms_lpd3dDevice->CreateTexture (m_dwIntermediateShadowMapSize, m_dwIntermediateShadowMapSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,
-											   &m_lpIntermediateRenderTargetTexture)))
+											   &m_lpIntermediateRenderTargetTexture, nullptr)))
 	{
 		LogBox ("Unable to create Intermediate Shadow render target texture");
 		return false;
@@ -386,8 +398,8 @@ bool CShadowRenderHelper::CreateTextures()
 		return false;
 	}
 
-	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwIntermediateShadowMapSize, m_dwIntermediateShadowMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE,
-														   &m_lpIntermediateDepthSurface)))
+	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwIntermediateShadowMapSize, m_dwIntermediateShadowMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, true,
+														   &m_lpIntermediateDepthSurface, nullptr)))
 	{
 		LogBox ("Unable to create Intermediate Shadow depth Surface");
 		return false;

@@ -332,7 +332,7 @@ void CAreaAccessor::DeleteSelectedObject()
 			if (pObjectInstance->pTree)
 			{
 				pObjectInstance->pTree->Clear();
-				CSpeedTreeForestDirectX8::Instance().DeleteInstance (pObjectInstance->pTree);
+				CSpeedTreeForestDirectX9::Instance().DeleteInstance (pObjectInstance->pTree);
 				pObjectInstance->pTree = NULL;
 			}
 
@@ -967,7 +967,7 @@ bool CAreaAccessor::SaveCollisionData (const char* c_szLoadingAreaFileName, FILE
 				CSpeedTreeWrapper * pMainTree;
 
 				// Main Tree 가 등록되어 있지 않으면 등록 시킨다.
-				if (!CSpeedTreeForestDirectX8::Instance().GetMainTree (c_pObjectData->dwCRC, &pMainTree, c_szTreeName))
+				if (!CSpeedTreeForestDirectX9::Instance().GetMainTree (c_pObjectData->dwCRC, &pMainTree, c_szTreeName))
 				{
 					TraceError ("Cannot get main tree from forest (filename: %s)", c_szTreeName);
 					return false;

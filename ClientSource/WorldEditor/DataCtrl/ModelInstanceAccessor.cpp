@@ -57,7 +57,7 @@ BOOL CModelInstanceAccessor::SetAccessorModel (CGraphicThing * pThing)
 		GetDeformableVertexCount(),
 		D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1,
 		D3DUSAGE_WRITEONLY,
-		D3DPOOL_MANAGED);
+		D3DPOOL_DEFAULT);
 	SetMainModelPointer (pModel, &m_kSharedDeformableVertexBuffer);
 	//SetModelPointer(pModel);
 

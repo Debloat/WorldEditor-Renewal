@@ -957,11 +957,11 @@ void CMapOutdoorAccessor::RenderAccessorTerrain (BYTE byRenderMode, BYTE byAttrF
 			STATEMANAGER.SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 			STATEMANAGER.SaveTextureStageState (1, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_CAMERASPACEPOSITION);
 			STATEMANAGER.SaveTextureStageState (1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-			STATEMANAGER.SaveTextureStageState (1, D3DTSS_MINFILTER,	D3DTEXF_POINT);
-			STATEMANAGER.SaveTextureStageState (1, D3DTSS_MAGFILTER,	D3DTEXF_POINT);
-			STATEMANAGER.SaveTextureStageState (1, D3DTSS_MIPFILTER,	D3DTEXF_POINT);
-			STATEMANAGER.SaveTextureStageState (1, D3DTSS_ADDRESSU,	D3DTADDRESS_CLAMP);
-			STATEMANAGER.SaveTextureStageState (1, D3DTSS_ADDRESSV,	D3DTADDRESS_CLAMP);
+			STATEMANAGER.SaveSamplerState (1, D3DSAMP_MINFILTER,	D3DTEXF_POINT);
+			STATEMANAGER.SaveSamplerState (1, D3DSAMP_MAGFILTER,	D3DTEXF_POINT);
+			STATEMANAGER.SaveSamplerState (1, D3DSAMP_MIPFILTER,	D3DTEXF_POINT);
+			STATEMANAGER.SaveSamplerState (1, D3DSAMP_ADDRESSU,	D3DTADDRESS_CLAMP);
+			STATEMANAGER.SaveSamplerState (1, D3DSAMP_ADDRESSV,	D3DTADDRESS_CLAMP);
 
 			RecurseRenderAccessorTerrain (m_pRootNode, byRenderMode, byAttrFlag);
 
@@ -969,11 +969,11 @@ void CMapOutdoorAccessor::RenderAccessorTerrain (BYTE byRenderMode, BYTE byAttrF
 			STATEMANAGER.RestoreTextureStageState (0, D3DTSS_TEXTURETRANSFORMFLAGS);
 			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_TEXCOORDINDEX);
 			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_TEXTURETRANSFORMFLAGS);
-			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_MINFILTER);
-			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_MAGFILTER);
-			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_MIPFILTER);
-			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_ADDRESSU);
-			STATEMANAGER.RestoreTextureStageState (1, D3DTSS_ADDRESSV);
+			STATEMANAGER.RestoreSamplerState (1, D3DSAMP_MINFILTER);
+			STATEMANAGER.RestoreSamplerState (1, D3DSAMP_MAGFILTER);
+			STATEMANAGER.RestoreSamplerState (1, D3DSAMP_MIPFILTER);
+			STATEMANAGER.RestoreSamplerState (1, D3DSAMP_ADDRESSU);
+			STATEMANAGER.RestoreSamplerState (1, D3DSAMP_ADDRESSV);
 
 			STATEMANAGER.RestoreTransform (D3DTS_TEXTURE0);
 			STATEMANAGER.RestoreTransform (D3DTS_TEXTURE1);
@@ -1053,7 +1053,7 @@ void CMapOutdoorAccessor::DrawMeshOnly (long patchnum)
 		return;
 	}
 
-	STATEMANAGER.SetVertexShader (D3DFVF_XYZ | D3DFVF_NORMAL);
+	STATEMANAGER.SetFVF (D3DFVF_XYZ | D3DFVF_NORMAL);
 	STATEMANAGER.SetStreamSource (0, pTerrainPatchProxy->HardwareTransformPatch_GetVertexBufferPtr()->GetD3DVertexBuffer(), m_iPatchTerrainVertexSize);
 	STATEMANAGER.DrawIndexedPrimitive (D3DPT_TRIANGLESTRIP, 0, m_iPatchTerrainVertexCount, 0, m_wNumIndices - 2);
 }
@@ -1104,7 +1104,7 @@ void CMapOutdoorAccessor::DrawPatchAttr (long patchnum, BYTE byAttrFlag)
 	TTerrainSplatPatch & rAttrSplatPatch = pTerrainAccessor->RAW_GetAttrSplatPatch();
 	STATEMANAGER.SetTexture (1, rAttrSplatPatch.Splats[0].pd3dTexture);
 
-	STATEMANAGER.SetVertexShader (D3DFVF_XYZ | D3DFVF_NORMAL);
+	STATEMANAGER.SetFVF (D3DFVF_XYZ | D3DFVF_NORMAL);
 	STATEMANAGER.SetStreamSource (0, pTerrainPatchProxy->HardwareTransformPatch_GetVertexBufferPtr()->GetD3DVertexBuffer(), m_iPatchTerrainVertexSize);
 	STATEMANAGER.DrawIndexedPrimitive (D3DPT_TRIANGLESTRIP, 0, m_iPatchTerrainVertexCount, 0, m_wNumIndices - 2);
 }
@@ -1186,7 +1186,7 @@ bool CMapOutdoorAccessor::Load (float x, float y, float z)
 	m_lOldReadX = -1;
 
 	// TODO: SetRenderingDevice에서 Environment로 부터 라이트 속성을 넘겨줘야 스태틱 라이트가 제대로 작동한다.
-	CSpeedTreeForestDirectX8::Instance().SetRenderingDevice (ms_lpd3dDevice);
+	CSpeedTreeForestDirectX9::Instance().SetRenderingDevice (ms_lpd3dDevice);
 
 	Update (x, y, z);
 
@@ -1538,7 +1538,7 @@ void CMapOutdoorAccessor::RenderMiniMap()
 	RenderDungeon();
 	if (IsVisiblePart (PART_TREE))
 	{
-		CSpeedTreeForestDirectX8::Instance().Render (Forest_RenderAll | Forest_RenderToMiniMap);
+		CSpeedTreeForestDirectX9::Instance().Render (Forest_RenderAll | Forest_RenderToMiniMap);
 	}
 	RenderTerrain();
 	RenderWater();

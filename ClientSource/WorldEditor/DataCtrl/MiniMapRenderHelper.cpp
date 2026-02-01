@@ -88,13 +88,19 @@ bool CMiniMapRenderHelper::StartRendering()
 	ms_matProj = matTopProj;
 	UpdatePipeLineMatrix();
 
-	CSpeedTreeForestDirectX8::Instance().UpdateCompundMatrix (v3Eye, ms_matView, ms_matProj);
+	CSpeedTreeForestDirectX9::Instance().UpdateCompundMatrix (v3Eye, ms_matView, ms_matProj);
 
 	SaveRenderTarget();
 
-	if (FAILED (ms_lpd3dDevice->SetRenderTarget (m_lpMiniMapRenderTargetSurface, m_lpMiniMapDepthSurface)))
+	if (FAILED (ms_lpd3dDevice->SetRenderTarget (0, m_lpMiniMapRenderTargetSurface)))
 	{
 		LogBox ("[ERROR] CMiniMapRenderHelper::StartRenderingPhase Unable to Set Mini Map Render Target");
+		bSuccess = false;
+	}
+
+	if (FAILED(ms_lpd3dDevice->SetDepthStencilSurface(m_lpMiniMapDepthSurface)))
+	{
+		LogBox("[ERROR] CMiniMapRenderHelper::StartRenderingPhase Unable to Set Mini Map Depth Stencil Surface");
 		bSuccess = false;
 	}
 
@@ -128,12 +134,12 @@ void CMiniMapRenderHelper::EndRendering()
 	ms_matProj = m_matBackupProj;
 	UpdatePipeLineMatrix();
 
-	CSpeedTreeForestDirectX8::Instance().UpdateCompundMatrix (CCameraManager::Instance().GetCurrentCamera()->GetEye(), ms_matView, ms_matProj);
+	CSpeedTreeForestDirectX9::Instance().UpdateCompundMatrix (CCameraManager::Instance().GetCurrentCamera()->GetEye(), ms_matView, ms_matProj);
 }
 
 bool CMiniMapRenderHelper::SaveRenderTarget()
 {
-	if (FAILED (ms_lpd3dDevice->GetRenderTarget (&m_lpBackupRenderTargetSurface)))
+	if (FAILED (ms_lpd3dDevice->GetRenderTarget (0, &m_lpBackupRenderTargetSurface)))
 	{
 		LogBox ("Unable to Save Window Render Target\n");
 		return false;
@@ -155,7 +161,8 @@ void CMiniMapRenderHelper::RestoreRenderTarget()
 		return;
 	}
 
-	ms_lpd3dDevice->SetRenderTarget (m_lpBackupRenderTargetSurface, m_lpBackupDepthSurface);
+	ms_lpd3dDevice->SetRenderTarget (0, m_lpBackupRenderTargetSurface);
+	ms_lpd3dDevice->SetDepthStencilSurface(m_lpBackupDepthSurface);
 
 	SAFE_RELEASE (m_lpBackupDepthSurface);
 	SAFE_RELEASE (m_lpBackupRenderTargetSurface);
@@ -173,7 +180,7 @@ bool CMiniMapRenderHelper::CreateTextures()
 	ReleaseTextures();
 
 	// Mini Map
-	if (FAILED (ms_lpd3dDevice->CreateTexture (m_dwMiniMapSize, m_dwMiniMapSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &m_lpMiniMapRenderTargetTexture)))
+	if (FAILED (ms_lpd3dDevice->CreateTexture (m_dwMiniMapSize, m_dwMiniMapSize, 1, D3DUSAGE_RENDERTARGET, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &m_lpMiniMapRenderTargetTexture, nullptr)))
 	{
 		LogBox ("[ERROR] CMiniMapRenderHelper::CreateTextures: Unable to create MiniMap render target texture");
 		return false;
@@ -185,7 +192,7 @@ bool CMiniMapRenderHelper::CreateTextures()
 		return false;
 	}
 
-	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwMiniMapSize, m_dwMiniMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, &m_lpMiniMapDepthSurface)))
+	if (FAILED (ms_lpd3dDevice->CreateDepthStencilSurface (m_dwMiniMapSize, m_dwMiniMapSize, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, true, &m_lpMiniMapDepthSurface, nullptr)))
 	{
 		LogBox ("[ERROR] CMiniMapRenderHelper::CreateTextures: Unable to create Output MiniMap depth Surface");
 		return false;

@@ -113,7 +113,7 @@ void CObjectData::SetLightName (DWORD dwIndex, const char* pszLightName)
 	return;
 }
 
-bool CObjectData::GetLight (DWORD dwIndex, const D3DLIGHT8** ppd3dLight)
+bool CObjectData::GetLight (DWORD dwIndex, const D3DLIGHT9** ppd3dLight)
 {
 	TLightElementData * pLightData;
 	if (!GetLightDataPointer (dwIndex, &pLightData))
@@ -178,7 +178,7 @@ void CObjectData::SetLightSpecular (DWORD dwIndex, int iRed, int iGreen, int iBl
 
 
 // Material
-void CObjectData::GetMaterial (const D3DMATERIAL8** ppd3dMaterial)
+void CObjectData::GetMaterial (const D3DMATERIAL9** ppd3dMaterial)
 {
 	*ppd3dMaterial = &m_LightData.Material;
 }
@@ -269,7 +269,7 @@ void CObjectData::LoadTexture (int iIndex, const char* c_szFileName)
 	GetExceptionPathName (c_szFileName, m_LightData.TextureData[iIndex].strName);
 }
 
-bool CObjectData::GetTexture (int iIndex, LPDIRECT3DTEXTURE8 * plpTexture)
+bool CObjectData::GetTexture (int iIndex, LPDIRECT3DTEXTURE9 * plpTexture)
 {
 	TTextureData & rTextureData = m_LightData.TextureData[iIndex];
 
@@ -612,7 +612,7 @@ void CObjectData::ClearLightElementData (DWORD dwIndex)
 	pData->strFileName = "";
 	pData->bLightEnable = false;
 
-	memset (&pData->Light, 0, sizeof (D3DLIGHT8));
+	memset (&pData->Light, 0, sizeof (D3DLIGHT9));
 
 	pData->Light.Type = D3DLIGHT_DIRECTIONAL;
 	pData->Light.Direction = D3DXVECTOR3 (-1.0f, 0.0f, 0.0f);

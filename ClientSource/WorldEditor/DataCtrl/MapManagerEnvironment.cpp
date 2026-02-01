@@ -469,7 +469,7 @@ void CMapManagerAccessor::InitializeEnvironmentData()
 {
 	m_EnvironmentData.bDirLightsEnable[ENV_DIRLIGHT_BACKGROUND] = TRUE;
 	m_EnvironmentData.bDensityFog = FALSE;
-	memset (&m_EnvironmentData.DirLights[ENV_DIRLIGHT_BACKGROUND], 0, sizeof (D3DLIGHT8));
+	memset (&m_EnvironmentData.DirLights[ENV_DIRLIGHT_BACKGROUND], 0, sizeof (D3DLIGHT9));
 	m_EnvironmentData.DirLights[ENV_DIRLIGHT_BACKGROUND].Type = D3DLIGHT_DIRECTIONAL;
 	m_EnvironmentData.DirLights[ENV_DIRLIGHT_BACKGROUND].Direction = D3DXVECTOR3 (0.5f, 0.5f, -0.5f);
 	m_EnvironmentData.DirLights[ENV_DIRLIGHT_BACKGROUND].Position = D3DXVECTOR3 (0.0f, 0.0f, 0.0f);
